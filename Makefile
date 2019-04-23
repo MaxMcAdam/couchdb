@@ -34,12 +34,12 @@ export ARCH ?= $(SYSTEM_ARCH)
 all: build run
 
 build:
-	docker build -t couchdb .
+	docker build -t couchdb -f ./Dockerfile.$(ARCH) .
 
 dev: build
 	-docker rm -f couchdb 2> /dev/null || :
 	echo "Storing couchdb data files in $(STORAGE_DIR)"
-	docker run -it --name couchdb --volume `pwd`:/outside --volume $(DEV_STORAGE_DIR):/data --publish 5984:5984 couchdb /bin/bash
+	docker run -it --name couchdb --volume `pwd`:/outside --volume $(DEV_STORAGE_DIR):/data --publish 5984:5984 couchdb /bin/bash -f ./Dockerfile.$(ARCH) .
 
 run:
 	-docker rm -f couchdb_ram 2>/dev/null || :

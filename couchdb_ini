@@ -102,4 +102,3 @@ file = /opt/couchdb/log/couch.log
 ; changing this.
 [admins]
 admin = p4ssw0rd
-
