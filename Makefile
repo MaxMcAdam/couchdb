@@ -45,9 +45,9 @@ run:
 	-docker rm -f couchdb_ram 2>/dev/null || :
 	-docker rm -f couchdb_disk 2>/dev/null || :
 	echo "Starting RAM instance of couchdb on port $(HOST_RAM_PORT) with data files in $(RAM_STORAGE_DIR)"
-	docker run -f ./Dockerfile.$(ARCH) -d --name couchdb_ram --volume `pwd`:/outside --volume $(RAM_STORAGE_DIR):/data --publish $(HOST_RAM_PORT):5984 couchdb .
+	docker run -d --name couchdb_ram --volume `pwd`:/outside --volume $(RAM_STORAGE_DIR):/data --publish $(HOST_RAM_PORT):5984 couchdb .
 	echo "Starting DISK instance of couchdb on port $(HOST_DISK_PORT) with data files in $(DISK_STORAGE_DIR)"
-	docker run -f ./Dockerfile.$(ARCH) -d --name couchdb_disk --volume `pwd`:/outside --volume $(DISK_STORAGE_DIR):/data --publish $(HOST_DISK_PORT):5984 couchdb .
+	docker run -d --name couchdb_disk --volume `pwd`:/outside --volume $(DISK_STORAGE_DIR):/data --publish $(HOST_DISK_PORT):5984 couchdb .
 
 exec:
 	docker exec -it couchdb /bin/bash
