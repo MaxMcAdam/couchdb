@@ -1,0 +1,11 @@
+{
+  "services": [
+    {
+      "org": "IBM"
+      "url": "couchdb_dual"
+      "versionRange": "[0.0.0,INFINITY]"
+      "variables": {
+      }
+    }
+  ]
+}

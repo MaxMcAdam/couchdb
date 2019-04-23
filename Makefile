@@ -47,7 +47,7 @@ run:
 	echo "Starting RAM instance of couchdb on port $(HOST_RAM_PORT) with data files in $(RAM_STORAGE_DIR)"
 	docker run -d --name couchdb_ram --volume `pwd`:/outside --volume $(RAM_STORAGE_DIR):/data --publish $(HOST_RAM_PORT):5984 couchdb
 	echo "Starting DISK instance of couchdb on port $(HOST_DISK_PORT) with data files in $(DISK_STORAGE_DIR)"
-	docker run -d --name couchdb_disk --volume `pwd`:/outside --volume $(DISK_STORAGE_DIR):/data --publish $(HOST_DISK_PORT):5984 couchdb 
+	docker run -d --name couchdb_disk --volume `pwd`:/outside --volume $(DISK_STORAGE_DIR):/data --publish $(HOST_DISK_PORT):5984 couchdb
 
 exec:
 	docker exec -it couchdb /bin/bash
@@ -61,5 +61,11 @@ clean: stop
 
 sync:
 	sync.sh
+
+publish-service: build publish-service-only
+publish-service-only:
+	: $${HZN_EXCHANGE_USER_AUTH:?} $${PRIVATE_KEY_FILE:?} $${PUBLIC_KEY_FILE:?}   # this verifies these env vars are set
+	hzn exchange service publish -k $$PRIVATE_KEY_FILE -K $$PUBLIC_KEY_FILE -f horizon/service.definition.json
+
 
 .PHONY: all build dev run exec stop clean sync
