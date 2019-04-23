@@ -27,6 +27,10 @@ DEV_STORAGE_DIR:=$(shell pwd)/../_couchdb_dev_data
 HOST_RAM_PORT:=5984
 HOST_DISK_PORT:=5985
 
+# Transform the machine arch into some standard values: "arm", "arm64", or "amd64"
+SYSTEM_ARCH := $(shell uname -m | sed -e 's/aarch64.*/arm64/' -e 's/x86_64.*/amd64/' -e 's/armv.*/arm/')
+export ARCH ?= $(SYSTEM_ARCH)
+
 all: build run
 
 build:
@@ -38,11 +42,12 @@ dev: build
 	docker run -it --name couchdb --volume `pwd`:/outside --volume $(DEV_STORAGE_DIR):/data --publish 5984:5984 couchdb /bin/bash
 
 run:
-	-docker rm -f couchdb 2>/dev/null || :
+	-docker rm -f couchdb_ram 2>/dev/null || :
+	-docker rm -f couchdb_disk 2>/dev/null || :
 	echo "Starting RAM instance of couchdb on port $(HOST_RAM_PORT) with data files in $(RAM_STORAGE_DIR)"
-	docker run -d --name couchdb --volume `pwd`:/outside --volume $(RAM_STORAGE_DIR):/data --publish $(HOST_RAM_PORT):5984 couchdb
+	docker run -d --name couchdb_ram --volume `pwd`:/outside --volume $(RAM_STORAGE_DIR):/data --publish $(HOST_RAM_PORT):5984 couchdb -f ./Dockerfile.$(ARCH) .
 	echo "Starting DISK instance of couchdb on port $(HOST_DISK_PORT) with data files in $(DISK_STORAGE_DIR)"
-	docker run -d --name couchdb2 --volume `pwd`:/outside --volume $(DISK_STORAGE_DIR):/data --publish $(HOST_DISK_PORT):5984 couchdb
+	docker run -d --name couchdb_disk --volume `pwd`:/outside --volume $(DISK_STORAGE_DIR):/data --publish $(HOST_DISK_PORT):5984 couchdb -f ./Dockerfile.$(ARCH) .
 
 exec:
 	docker exec -it couchdb /bin/bash

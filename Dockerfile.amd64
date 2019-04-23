@@ -8,14 +8,14 @@ RUN apt-get install -y vim curl wget jq gnupg
 
 # Install Mozilla JS API and its dev package
 RUN apt-get install -y libnspr4 libnspr4-dev libffi-dev
-RUN wget http://http.us.debian.org/debian/pool/main/m/mozjs/libmozjs185-1.0_1.8.5-1.0.0+dfsg-6_armhf.deb
-RUN dpkg -i libmozjs185-1.0_1.8.5-1.0.0+dfsg-6_armhf.deb
+RUN wget http://http.us.debian.org/debian/pool/main/m/mozjs/libmozjs185-1.0_1.8.5-1.0.0+dfsg-6_amd64.deb
+RUN dpkg -i libmozjs185-1.0_1.8.5-1.0.0+dfsg-6_amd64.deb
 RUN apt-get install -f
-RUN rm libmozjs185-1.0_1.8.5-1.0.0+dfsg-6_armhf.deb
-RUN wget http://http.us.debian.org/debian/pool/main/m/mozjs/libmozjs185-dev_1.8.5-1.0.0+dfsg-6_armhf.deb
-RUN dpkg -i libmozjs185-dev_1.8.5-1.0.0+dfsg-6_armhf.deb
+RUN rm libmozjs185-1.0_1.8.5-1.0.0+dfsg-6_amd64.deb
+RUN wget http://http.us.debian.org/debian/pool/main/m/mozjs/libmozjs185-dev_1.8.5-1.0.0+dfsg-6_amd64.deb
+RUN dpkg -i libmozjs185-dev_1.8.5-1.0.0+dfsg-6_amd64.deb
 RUN apt-get install -f
-RUN rm libmozjs185-dev_1.8.5-1.0.0+dfsg-6_armhf.deb
+RUN rm libmozjs185-dev_1.8.5-1.0.0+dfsg-6_amd64.deb
 
 # Install Erlang
 RUN curl -L http://packages.erlang-solutions.com/debian/erlang_solutions.asc | apt-key add -
@@ -43,8 +43,6 @@ RUN cp -Rp /apache-couchdb-2.3.0/rel/couchdb/* /home/couchdb/
 COPY ./couchdb_ini /home/couchdb/etc/local.ini
 
 # Symlink in the bound host volume to `data` (to persist the database data)
-# Note that the `docker run` command must mount a volume to `/data` for this!
-# See the Makefile STORAGE_DIR assignment for more details on this.
 RUN ln -s /data /home/couchdb/data
 
 # Fixup all permissions
