@@ -34,7 +34,7 @@ export ARCH ?= $(SYSTEM_ARCH)
 all: build run
 
 build:
-	docker build -t couchdb -f ./Dockerfile.$(ARCH) .
+	docker build -t $(DOCKER_REPO_USERNAME)/$(SERVICE_NAME)_$(ARCH) -f ./Dockerfile.$(ARCH) .
 
 dev: build
 	-docker rm -f couchdb 2> /dev/null || :
