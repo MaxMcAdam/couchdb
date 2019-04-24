@@ -16,6 +16,6 @@ export PRIVATE_KEY_FILE='horizon/keys/service.private.key'
 export PUBLIC_KEY_FILE='horizon/keys/service.public.pem'
 
 export DOCKER_REPO_USERNAME='maxwellmcadam'
-export DOCKER_IMAGE_BASE='maxwellmcadam/couchdb_dual'
+export DOCKER_IMAGE_BASE='couchdb_dual'
 export SERVICE_NAME='couchdb_dual'
 export SERVICE_VERSION='0.0.1'
