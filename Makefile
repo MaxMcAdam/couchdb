@@ -34,7 +34,7 @@ export ARCH ?= $(SYSTEM_ARCH)
 all: build run
 
 build:
-	docker build -t $(DOCKER_REPO_USERNAME)/$(SERVICE_NAME)_$(ARCH):$(SERVICE_VERSION) -f ./Dockerfile.$(ARCH) .
+	docker build -t $(DOCKER_USER)/$(SERVICE_NAME)_$(ARCH):$(SERVICE_VERSION) -f ./Dockerfile.$(ARCH) .
 
 dev: build
 	-docker rm -f couchdb 2> /dev/null || :
@@ -45,19 +45,20 @@ run:
 	-docker rm -f couchdb_ram 2>/dev/null || :
 	-docker rm -f couchdb_disk 2>/dev/null || :
 	echo "Starting RAM instance of couchdb on port $(HOST_RAM_PORT) with data files in $(RAM_STORAGE_DIR)"
-	docker run -d --name couchdb_ram --volume `pwd`:/outside --volume $(RAM_STORAGE_DIR):/data --publish $(HOST_RAM_PORT):5984 couchdb
+	docker run -d --publish $(HOST_RAM_PORT):5984 --name $(SERVICE_NAME)_ram --volume `pwd`:/outside --volume $(RAM_STORAGE_DIR):/data $(DOCKER_USER)/$(SERVICE_NAME)_$(ARCH):$(SERVICE_VERSION)
 	echo "Starting DISK instance of couchdb on port $(HOST_DISK_PORT) with data files in $(DISK_STORAGE_DIR)"
-	docker run -d --name couchdb_disk --volume `pwd`:/outside --volume $(DISK_STORAGE_DIR):/data --publish $(HOST_DISK_PORT):5984 couchdb
+	docker run -d --publish $(HOST_DISK_PORT):5984 --name $(SERVICE_NAME)_disk --volume `pwd`:/outside --volume $(DISK_STORAGE_DIR):/data $(DOCKER_USER)/$(SERVICE_NAME)_$(ARCH):$(SERVICE_VERSION)
 
 exec:
 	docker exec -it couchdb /bin/bash
 
 stop:
-	-docker rm -f couchdb 2>/dev/null || :
-	-docker rm -f couchdb2 2>/dev/null || :
+	-docker rm -f $(SERVICE_NAME)_ram 2>/dev/null || :
+	-docker rm -f $(SERVICE_NAME)_disk 2>/dev/null || :
 
 clean: stop
-	-docker rmi couchdb 2>/dev/null || :
+	-docker rmi $(SERVICE_NAME)_ram 2>/dev/null || :
+	-docker rmi $(SERVICE_NAME)_disk 2>/dev/null || :
 
 sync:
 	sync.sh

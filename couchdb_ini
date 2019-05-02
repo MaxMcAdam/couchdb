@@ -101,4 +101,4 @@ file = /opt/couchdb/log/couch.log
 ; 'username = password' lines. Don't forget to restart CouchDB after
 ; changing this.
 [admins]
-admin = p4ssw0rd
+adm1n = passw0rd

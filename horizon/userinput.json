@@ -1,10 +1,13 @@
 {
   "services": [
     {
-      "org": "IBM"
-      "url": "couchdb_dual"
-      "versionRange": "[0.0.0,INFINITY]"
+      "org": "Maxwell.McAdam@ibm.com",
+      "url": "maxwellmcadam/couchdb_dual",
+      "versionRange": "[0.0.0,INFINITY]",
       "variables": {
+        "DB_URL":"$DB_URL",
+        "DB_ADMIN_USERNAME":"$DB_ADMIN_USERNAME",
+        "DB_ADMIN_PW":"$DB_ADMIN_PW"
       }
     }
   ]

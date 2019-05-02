@@ -1,23 +1,44 @@
 {
   "org": "$HZN_ORG_ID",
   "label": "$SERVICE_NAME for $ARCH",
-  "description": "A network monitoring service",
+  "description": "Two instances of couchdb one that runs in ram and one on the hard disk",
   "public": true,
   "documentation": "",
-  "url": "$SERVICE_NAME",
+  "url": "$DOCKER_USER/$SERVICE_NAME",
   "version": "$SERVICE_VERSION",
   "arch": "$ARCH",
   "sharable": "multiple",
   "requiredServices": [],
   "userInput": [
-      {
-      }
+    {
+          "name": "DB_URL",
+          "label": "The url to reach the database on",
+          "type": "string",
+          "defaultValue": "127.0.0.1"
+    },
+    {
+          "name": "DB_ADMIN_USERNAME",
+          "label": "A username for a database administrator",
+          "type": "string",
+          "defaultValue": "admin"
+    },
+    {
+          "name": "DB_ADMIN_PW",
+          "label": "A password for the database administrator",
+          "type": "string",
+          "defaultValue": "p4ssw0rd"
+    }
   ],
   "deployment": {
-      "services": {
-          "$SERVICE_NAME": {
-              "image": "maxwellmcadam/${DOCKER_IMAGE_BASE}_$ARCH:$SERVICE_VERSION"
-          }
-      }
-  }
+        "services": {
+            "couchdb_dual": {
+                "environment": [
+                    "DB_URL=$DB_URL",
+                    "DB_ADMIN_USERNAME=$DB_ADMIN_USERNAME",
+                    "DB_ADMIN_PW=$DB_ADMIN_PW"
+                ],
+                "image": "$DOCKER_USER/${DOCKER_IMAGE_BASE}_$ARCH:$SERVICE_VERSION"
+            }
+        }
+    }
 }
