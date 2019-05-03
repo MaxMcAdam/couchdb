@@ -27,6 +27,18 @@
           "label": "A password for the database administrator",
           "type": "string",
           "defaultValue": "p4ssw0rd"
+    },
+    {
+          "name": "HOST_DB_PORT",
+          "label": "The port used by the host to access this instance of couchdb_dual",
+          "type": "string",
+          "defaultValue": "5984"
+    },
+    {
+          "name": "STORAGE_DIR",
+          "label": "The host directory to be mapped to the /data folder",
+          "type": "string",
+          "defaultValue": "/ramdisk"
     }
   ],
   "deployment": {
@@ -37,7 +49,16 @@
                     "DB_ADMIN_USERNAME=$DB_ADMIN_USERNAME",
                     "DB_ADMIN_PW=$DB_ADMIN_PW"
                 ],
-                "image": "$DOCKER_USER/${DOCKER_IMAGE_BASE}_$ARCH:$SERVICE_VERSION"
+                "image": "$DOCKER_USER/${DOCKER_IMAGE_BASE}_$ARCH:$SERVICE_VERSION",
+                "ports":[
+                  {
+                    "HostPort":"$HOST_DB_PORT:5984/tcp",
+                    "HostIP":"0.0.0.0"
+                  }
+                ],
+                "binds":[
+                  "$STORAGE_DIR:/data:rw"
+                ]
             }
         }
     }

@@ -7,7 +7,8 @@
       "variables": {
         "DB_URL":"$DB_URL",
         "DB_ADMIN_USERNAME":"$DB_ADMIN_USERNAME",
-        "DB_ADMIN_PW":"$DB_ADMIN_PW"
+        "DB_ADMIN_PW":"$DB_ADMIN_PW",
+        "STORAGE_DIR":"/../_couchdb_dev_data"
       }
     }
   ]
